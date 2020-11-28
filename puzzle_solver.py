@@ -31,38 +31,43 @@ def create_cnf_rules(level, starting_tile, ending_tile):
     num_of_tiles = len(tiles)
     #clauses is an array of arrays
     clauses = []
-    #don't know if i need list_of_variables for sure, or if i can just manipulate integers as I go using a for-loop
-    list_of_variables =[i for i in range(1,num_of_blocks * num_of_tiles + 1)]
+    
     #Must start at this tile and end at this future tile:
     # for i in range(1, num_of_blocks+1):
     #     if i == starting_tile:
     #         clauses.append([i])
     #     else:
     #         clauses.append([-i])
+
     # #Must end at this tile, can combine with the above for better efficiency but i don't like the code:
     # for i in range(1 + num_of_blocks * (num_of_tiles - 1), num_of_blocks + num_of_blocks * (num_of_tiles - 1)+1):
     #     if i % num_of_blocks == ending_tile % num_of_blocks:
     #         clauses.append([i])
     #     else:
     #         clauses.append([-i])
+
     # #Boulders:
     # for i in boulders:
     #     for j in range(num_of_tiles):
     #         clauses.append([-(i + (num_of_blocks * j))])
+
     # #At least one tile per step:
     # for j in range(1, num_of_tiles):
     #     clauses.append([i + j*num_of_blocks for i in tiles])
+
     #At most one tile per step:
     # for i in tiles:
     #     for j in tiles:
     #         if j > i:
     #             for k in range(num_of_tiles):
     #                 clauses.append([-(i+num_of_blocks*k),-(j+num_of_blocks*k)])
+    
     #Each tile is used at least once by the end of the path:
-
-
-
-
+    # for i in tiles:
+    #     dummy=[]
+    #     for j in range(num_of_tiles):
+    #         dummy.append(i + num_of_blocks * j)
+    #     clauses.append(dummy)
 
     #Each tile is used at most once by the end of the path:
     
