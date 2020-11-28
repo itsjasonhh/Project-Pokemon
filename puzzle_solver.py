@@ -61,20 +61,22 @@ def create_cnf_rules(level, starting_tile, ending_tile):
     #         if j > i:
     #             for k in range(num_of_tiles):
     #                 clauses.append([-(i+num_of_blocks*k),-(j+num_of_blocks*k)])
-    
+
     #Each tile is used at least once by the end of the path:
     # for i in tiles:
-    #     dummy=[]
+    #     dummy = []
     #     for j in range(num_of_tiles):
     #         dummy.append(i + num_of_blocks * j)
     #     clauses.append(dummy)
 
     #Each tile is used at most once by the end of the path:
+    for i in tiles:
+        dummy = [i + num_of_blocks * j for j in range(num_of_tiles)]
+        for j in dummy:
+            for k in dummy:
+                if k > j:
+                    clauses.append([-j,-k])
     
-
-
-
-
     #Path must be continuous (no skipping tiles):
 
 
