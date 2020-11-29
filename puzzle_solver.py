@@ -31,27 +31,27 @@ def create_cnf_rules(level, starting_tile, ending_tile):
     num_of_tiles = len(tiles)
     #clauses is an array of arrays
     clauses = []
-    
-    #Must start at this tile and end at this future tile:
-    for i in range(1, num_of_blocks+1):
+
+    #Must start at this tile:
+    for i in tiles:
         if i == starting_tile:
             clauses.append([i])
         else:
             clauses.append([-i])
 
-    # #Must end at this tile, can combine with the above for better efficiency but i don't like the code:
-    for i in range(1 + num_of_blocks * (num_of_tiles - 1), num_of_blocks + num_of_blocks * (num_of_tiles - 1)+1):
-        if i % num_of_blocks == ending_tile % num_of_blocks:
-            clauses.append([i])
+    #Must end at this tile:
+    for i in tiles:
+        if i == ending_tile:
+            clauses.append([i + (num_of_tiles-1)*num_of_blocks])
         else:
-            clauses.append([-i])
+            clauses.append([-(i + (num_of_tiles-1)*num_of_blocks)])
 
-    # #Boulders:
+    #Boulders:
     for i in boulders:
         for j in range(num_of_tiles):
             clauses.append([-(i + (num_of_blocks * j))])
 
-    # #At least one tile per step:
+    #At least one tile per step:
     for j in range(1, num_of_tiles):
         clauses.append([i + j*num_of_blocks for i in tiles])
 
@@ -81,50 +81,76 @@ def create_cnf_rules(level, starting_tile, ending_tile):
     for i in tiles:
         if i <= columns:
             if i % columns == 1:
-                for k in range(num_of_tiles):
+                for k in range(num_of_tiles-1):
                     clauses.append([-(i + k*num_of_blocks), i + k*num_of_blocks + 1 + num_of_blocks, i+k*num_of_blocks + columns + num_of_blocks])
             elif i % columns == 0:
-                for k in range(num_of_tiles):
+                for k in range(num_of_tiles-1):
                     clauses.append([-(i+k*num_of_blocks),i+k*num_of_blocks - 1 + num_of_blocks, i+k*num_of_blocks + columns + num_of_blocks])
             else:
-                for k in range(num_of_tiles):
+                for k in range(num_of_tiles-1):
                     clauses.append([-(i+k*num_of_blocks), i +k*num_of_blocks + 1 + num_of_blocks, i +k*num_of_blocks - 1 + num_of_blocks, i +k*num_of_blocks + columns + num_of_blocks])
-        elif i >= 1 + num_of_blocks * (num_of_tiles - 1):
+        elif i >= 1 + (rows-1)*columns:
             if i % columns == 1:
-                for k in range(num_of_tiles):
+                for k in range(num_of_tiles-1):
                     clauses.append([-(i+k*num_of_blocks), i+k*num_of_blocks + 1 + num_of_blocks, i+k*num_of_blocks - columns + num_of_blocks])
             elif i % columns == 0:
-                for k in range(num_of_tiles):
+                for k in range(num_of_tiles-1):
                     clauses.append([-(i+k*num_of_blocks), i+k*num_of_blocks - 1 + num_of_blocks, i+k*num_of_blocks - columns + num_of_blocks])
             else:
-                for k in range(num_of_tiles):
-                    clauses.append([(-i+k*num_of_blocks), i+k*num_of_blocks - 1 + num_of_blocks, i+k*num_of_blocks + 1 + num_of_blocks, i+k*num_of_blocks - columns + num_of_blocks])
+                for k in range(num_of_tiles-1):
+                    clauses.append([-(i+k*num_of_blocks), i+k*num_of_blocks - 1 + num_of_blocks, i+k*num_of_blocks + 1 + num_of_blocks, i+k*num_of_blocks - columns + num_of_blocks])
         else:
             if i % columns == 1:
-                for k in range(num_of_tiles):
+                for k in range(num_of_tiles-1):
                     clauses.append([-(i+k*num_of_blocks), i+k*num_of_blocks - columns + num_of_blocks, i+k*num_of_blocks + 1 + num_of_blocks, i+k*num_of_blocks + columns + num_of_blocks])
             elif i % columns == 0:
-                for k in range(num_of_tiles):
+                for k in range(num_of_tiles-1):
                     clauses.append([-(i+k*num_of_blocks), i+k*num_of_blocks - columns + num_of_blocks, i+k*num_of_blocks - 1 + num_of_blocks, i+k*num_of_blocks + columns + num_of_blocks])
             else:
-                for k in range(num_of_tiles):
+                for k in range(num_of_tiles-1):
                     clauses.append([-(i+k*num_of_blocks), i+k*num_of_blocks - columns + num_of_blocks, i+k*num_of_blocks + 1 + num_of_blocks, i+k*num_of_blocks - 1 + num_of_blocks, i+k*num_of_blocks + columns + num_of_blocks])
     return clauses
     
 
 
-
-
-level = [[0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,1,0,0,0,1,0],[0,0,0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,1,0,0]]
-level2 = [[0,0,1],[0,0,0],[1,0,0]]
+def solve_puzzle(level, starting_tile, ending_tile):
+    rows, columns = get_dimensions(level)
+    blocks = rows * columns
+    clauses = create_cnf_rules(level, starting_tile, ending_tile)
+    solver = Glucose3()
+    for i in clauses:
+        solver.add_clause(i)
+    if solver.solve() == False:
+        print("No solution!")
+        return
+    else:
+        solutions = []
+        for i in solver.get_model():
+            if i > 0:
+                while i > blocks:
+                    i -= blocks
+                solutions.append(i)
+        return solutions
+        
+level3 = [[0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,1,0,0,0,1,0],[0,0,0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,1,0,0]]
+level2 = [[0,0,0,0,0,0,0],[0,1,0,0,0,0,0],[0,0,0,0,1,0,0]]
+level1 = [[0,0,1],[0,0,0],[1,0,0]]
 #print(get_tile_types(level))
 #don't need to put 0 at the end of each clause, but also generates unused variables 1-10 (since i'm starting with 11)
 #How to number variables??? If there are x tiles, then 1,2,...,x = tile on step 1, x+1,...,2x = tile on step 
 # g = Glucose3()
-# g.add_clause([0,2])
-# g.add_clause([-2,5])
+# g.add_clause([1,2])
+# g.add_clause([-2,3])
 # print((g.solve()))
+# print(type(g.solve()))
 # print(g.get_model())
+# print(type(g.get_model()[0]))
 
 #test for the 3x3 puzzle (level 1):
-create_cnf_rules(level2,8,2)
+#print(solve_puzzle(level2, 8, 2))
+
+#test for the 3x7 puzzle (level 2):
+#print(solve_puzzle(level2,18,4))
+
+#test for the 4x11 puzzle (level 3):
+#print(solve_puzzle(level3,39,6))
