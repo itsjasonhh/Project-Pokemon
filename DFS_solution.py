@@ -65,20 +65,24 @@ def solve_by_dfs(level, start, end):
 
 #board updates per recursive call, so maybe have each call generate its own copy of board to modify and path update
 # so if it's not a solution, we don't have to backtrack and undo any changes made 
+
+#Need to fix: prints out correctly, but returns None.
 def traverse(unvisited, start, end, path, edges):
     copy_unvisited = unvisited.copy()
     copy_path = path.copy()
     current = start
     copy_unvisited.remove(current)
     copy_path.append(current)
-    print(copy_path)
     if current == end:
         if len(copy_unvisited) == 0:
+            print(copy_path)
             return copy_path
     for i in edges[current]:
         if i in copy_unvisited:
             traverse(copy_unvisited, i, end, copy_path, edges)
     
-edges = create_list_of_edges(level1)
-traverse([1,2,4,5,6,8,9], 8, 2, [], edges)
-
+edges1 = create_list_of_edges(level1)
+print(traverse([1,2,4,5,6,8,9], 8, 2, [], edges1))
+edges2 = create_list_of_edges(level2)
+tiles,boulders = get_tile_types(level2)
+print(traverse(tiles,18,4,[],edges2))
