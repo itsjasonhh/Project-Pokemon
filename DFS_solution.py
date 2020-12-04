@@ -87,23 +87,24 @@ def traverse(unvisited, start, end, path, edges,sol):
     copy_unvisited.remove(current)
     copy_path.append(current)
     if current == end and len(copy_unvisited)==0:
-        for i in copy_path:
-            sol.append(i)
+        if len(sol) == 0:
+            for i in copy_path:
+                sol.append(i)
     for i in edges[current]:
         if i in copy_unvisited:
             traverse(copy_unvisited, i, end, copy_path, edges,sol)
     return sol
 
 
-# edges1 = create_list_of_edges(level1)
-# print(traverse([1,2,4,5,6,8,9], 8, 2, [], edges1, []))
-# edges2 = create_list_of_edges(level2)
-# tiles,boulders = get_tile_types(level2)
-# print(traverse(tiles,18,4,[],edges2,[]))
-# edges3 = create_list_of_edges(level3)
-# tiles2, boulders2 = get_tile_types(level3)
-# print(traverse(tiles2,39,6,[],edges3,[]))
-# edges4 = create_list_of_edges(level4)
-# tiles4, boulders4 = get_tile_types(level4)
-# print(traverse(tiles4,39,6,[],edges4,[]))
+edges1 = create_list_of_edges(level1)
+print(traverse([1,2,4,5,6,8,9], 8, 2, [], edges1, []))
+edges2 = create_list_of_edges(level2)
+tiles,boulders = get_tile_types(level2)
+print(traverse(tiles,18,4,[],edges2,[]))
+edges3 = create_list_of_edges(level3)
+tiles2, boulders2 = get_tile_types(level3)
+print(traverse(tiles2,39,6,[],edges3,[]))
+edges4 = create_list_of_edges(level4)
+tiles4, boulders4 = get_tile_types(level4)
+print(traverse(tiles4,39,6,[],edges4,[]))
 
