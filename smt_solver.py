@@ -147,5 +147,5 @@ def solve_puzzle():
             p['smoke'][solution[i][smoke]],
             p['pet'][solution[i][pet]]
         ))
-
+        
 solve_puzzle()
