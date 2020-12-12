@@ -142,7 +142,7 @@ def solve_puzzle(level, starting_tile, ending_tile):
                 solutions.append(i)
         return solutions
 
-print(timeit.timeit(
+print(sum(timeit.repeat(
     """from pysat.solvers import Glucose3
 
 
@@ -287,10 +287,10 @@ def solve_puzzle(level, starting_tile, ending_tile):
         return solutions
 
 solve_puzzle(level1,8,2)""", 
-        number=1
-))
+        repeat=5 ,number=1
+))/5)
 
-print(timeit.timeit(
+print(sum(timeit.repeat(
     """from pysat.solvers import Glucose3
 
 
@@ -435,10 +435,10 @@ def solve_puzzle(level, starting_tile, ending_tile):
         return solutions
 
 solve_puzzle(level2,18,4)""", 
-        number=1
-))
+        repeat=5,number=1
+))/5)
 
-print(timeit.timeit(
+print(sum(timeit.repeat(
     """from pysat.solvers import Glucose3
 
 
@@ -583,11 +583,11 @@ def solve_puzzle(level, starting_tile, ending_tile):
         return solutions
 
 solve_puzzle(level3,39,6)""", 
-        number=1
-))
+        repeat=5, number=1
+))/5)
 
 
-print(timeit.timeit(
+print(sum(timeit.repeat(
     """from pysat.solvers import Glucose3
 
 
@@ -732,5 +732,5 @@ def solve_puzzle(level, starting_tile, ending_tile):
         return solutions
 
 solve_puzzle(level4,39,6)""", 
-        number=1
-))
+        repeat=5, number=1
+))/5)
