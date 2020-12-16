@@ -290,6 +290,3 @@ print(timeit.timeit('solve_puzzle(level1,8,2)',setup=long_code,number=100)/100)
 print(timeit.timeit('solve_puzzle(level2,18,4)',setup=long_code,number=100)/100)
 print(timeit.timeit('solve_puzzle(level3,39,6)',setup=long_code,number=100)/100)
 print(timeit.timeit('solve_puzzle(level4,39,6)',setup=long_code,number=100)/100)
-
-
-
