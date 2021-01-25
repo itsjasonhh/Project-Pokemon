@@ -18,7 +18,7 @@ These rules are encoded into the SAT Solver:
 6. Each tile is used at most once by the end of the path. (Together with 5, this means each tile is used exactly once by the end of the path, a necessary condition for the puzzle).
 7. The path must be continuous (the player cannot jump between two disconnected tiles).
 
-
+After these clauses are added to the SAT-solver, run solve_puzzle. The SAT-solver will find a satisfying assignment to the variables, and then convert them back to the encoding for the first step for an easy-to-see solution.
 
 
 Also in this repo is a DFS solution to finding the correct path. In each of puzzle_solver.py and DFS_solution.py, there is code for using the TimeIt module. The SAT-Solver solution is generally quicker than the DFS solution, although the results may be biased due to how the puzzles are oriented. 
